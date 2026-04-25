@@ -9,8 +9,8 @@ pipeline{
     environment {
         APP_NAME = "devops-mega-project"
         RELEASE = "1.0.0"
-        DOCKER_USER = "mydevopsuser46"
-        DOCKER_PASS = 'dockerhub'
+        DOCKER_USER = "ampat1024"
+        DOCKER_PASS = 'credentials("dockerhub-token")'
         IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
         IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
         JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
@@ -110,22 +110,22 @@ pipeline{
 
     }
 
-    post {
-          success {
-              emailext (
-                  to: 'ampat1024@gmail.com',
-                  subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                  body: """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' succeeded.</p><p>Check console output at <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
-                  mimeType: 'text/html'
-              )
-          }
-          failure {
-              emailext (
-                  to: 'ampat1024@gmail.com',
-                  subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                  body: """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' failed.</p><p>Check console output at <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
-                  mimeType: 'text/html'
-               )
+//    post {
+//          success {
+//             emailext (
+//                  to: 'ampat1024@gmail.com',
+//                  subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+//                  body: """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' succeeded.</p><p>Check console output at <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
+//                  mimeType: 'text/html'
+//              )
+//          }
+//          failure {
+//              emailext (
+//                  to: 'ampat1024@gmail.com',
+//                  subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+//                  body: """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' failed.</p><p>Check console output at <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
+//                  mimeType: 'text/html'
+//               )
         }
 
        }

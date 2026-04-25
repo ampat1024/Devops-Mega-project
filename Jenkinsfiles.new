@@ -10,7 +10,7 @@ pipeline{
         APP_NAME = "devops-mega-project"
         RELEASE = "1.0.0"
         DOCKER_USER = "ampat1024"
-        DOCKER_PASS = credentials("dockerhub-token")
+        DOCKER_PASS = credentials("dockerhub-creds")
         IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
         IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
 	//	SONAR_TOKEN = credentials("jenkins-sonarqube-token")

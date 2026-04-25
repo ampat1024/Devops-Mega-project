@@ -57,6 +57,7 @@ pipeline{
 					   mvn clean verify sonar:sonar \
 					     -Dsonar.host.url=http://sonar.tuxtechz.online:9000 \
 						 -Dsonar.login=$SONAR_TOKEN
+					   """
                     }
                 }
             }

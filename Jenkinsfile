@@ -10,9 +10,10 @@ pipeline{
         APP_NAME = "devops-mega-project"
         RELEASE = "1.0.0"
         DOCKER_USER = "ampat1024"
-        DOCKER_PASS = 'credentials("dockerhub-token")'
+        DOCKER_PASS = credentials("dockerhub-token")
         IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
         IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+		SONAR_TOKEN = credentials("jenkins-sonarqube-token")
        // JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
 
     }
@@ -52,7 +53,7 @@ pipeline{
              //       withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token'){
              //          sh "mvn sonar:sonar"
              //       }
-                    withSonarQubeEnv([string(credentialsId: 'jenkins-sonarqube-token', variable: 'SONAR_TOKEN')]){
+                    withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token'){
                        sh """
 					   mvn clean verify sonar:sonar \
 					     -Dsonar.host.url=http://sonar.tuxtechz.online:9000 \

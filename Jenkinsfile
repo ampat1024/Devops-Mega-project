@@ -13,7 +13,6 @@ pipeline{
         DOCKER_PASS = credentials("dockerhub-token")
         IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
         IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
-		SONAR_TOKEN = credentials("jenkins-sonarqube-token")
        // JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
 
     }
@@ -50,29 +49,21 @@ pipeline{
         stage("Sonarqube Analysis") {
             steps {
                 script {
-             //       withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token'){
-             //          sh "mvn sonar:sonar"
-             //       }
                     withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token'){
-                       sh """
-					   mvn clean verify sonar:sonar \
-					     -Dsonar.host.url=http://sonar.tuxtechz.online:9000 \
-						 -Dsonar.login=$SONAR_TOKEN
-					   """
+                       sh "mvn sonar:sonar"
                     }
-					waitForQualityGate()
                 }
             }
         }
 
-//        stage("Quality Gate") {
-//            steps {
-//                script {
-//                    waitForQualityGate abortPipeline: false, credentialsId: 'jenkins-sonarqube-token'
-//                }
-//           }
+        stage("Quality Gate") {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'jenkins-sonarqube-token'
+                }
+           }
 
-//        }
+        }
 
         stage("Build & Push Docker Image") {
             steps {
@@ -119,24 +110,24 @@ pipeline{
 
     }
 
-//    post {
-//          success {
-//             emailext (
-//                  to: 'ampat1024@gmail.com',
-//                  subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-//                  body: """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' succeeded.</p><p>Check console output at <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
-//                  mimeType: 'text/html'
-//              )
-//          }
-//          failure {
-//              emailext (
-//                  to: 'ampat1024@gmail.com',
-//                  subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-//                  body: """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' failed.</p><p>Check console output at <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
-//                  mimeType: 'text/html'
-//               )
-//        }
+    post {
+          success {
+             emailext (
+                  to: 'ampat1024@gmail.com',
+                  subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                  body: """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' succeeded.</p><p>Check console output at <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
+                  mimeType: 'text/html'
+              )
+          }
+          failure {
+              emailext (
+                  to: 'ampat1024@gmail.com',
+                  subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                  body: """<p>Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' failed.</p><p>Check console output at <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
+                  mimeType: 'text/html'
+               )
+          }
 
-//       }
+    }
 
 }

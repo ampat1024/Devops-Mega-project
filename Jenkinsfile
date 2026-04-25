@@ -49,8 +49,14 @@ pipeline{
         stage("Sonarqube Analysis") {
             steps {
                 script {
-                    withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token'){
-                        sh "mvn sonar:sonar"
+             //       withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token'){
+             //          sh "mvn sonar:sonar"
+             //       }
+                    withSonarQubeEnv([string(credentialsId: 'jenkins-sonarqube-token', variable: 'SONAR_TOKEN')]){
+                       sh """
+					   mvn clean verify sonar:sonar \
+					     -Dsonar.host.url=http://sonar.tuxtechz.online:9000 \
+						 -Dsonar.login=$SONAR_TOKEN
                     }
                 }
             }
